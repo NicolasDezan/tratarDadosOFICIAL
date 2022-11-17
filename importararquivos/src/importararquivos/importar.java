@@ -142,7 +142,8 @@ public class importar {
 				}if(escolha2 == 1) {
 					reiniciar = true;
 				}
-		    
+				System.out.println("Obrigado"); 
+
 		}
 		
 	
