@@ -143,11 +143,11 @@ public class importar {
 					reiniciar = true;
 				}
 		    
-	
 		}
+		
 	
 }
-		System.out.println("O programa está finalizado."); 
+		System.out.println("O programa está finalizado. Até a próxima!"); 
 		System.exit(0);
 	} 					
 }
