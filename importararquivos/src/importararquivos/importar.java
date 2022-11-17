@@ -39,19 +39,18 @@ public class importar {
 		if(escolha == 2) {                                             //Esse é o método de adição dados por arquivos 
 		// importar dados numéricos de um arquivo .txt -> https://www.youtube.com/watch?v=YHV44ZVgab8&t=34s		
 		String linha = new String(); //vai receber o conjunto de dados em forma de texto-String
-		String nomearquivo = new String();
-	    System.out.print("Insira o nome de seu arquivo de texto: ");	    
-	    nomearquivo = teclado.nextLine();
-		String endereco = "E:\\Meus Dados\\"+nomearquivo;
+	    System.out.print("Insira o endereço do seu arquivo: ");	    
+	    String endereco = teclado.nextLine();
+		//String endereco = "E:\\Meus Dados\\"+nomearquivo;      // comando desativado que é usado para meu proprio PC 
 		File arq = new File (endereco);
 
-		while(!arq.exists() || nomearquivo == "") {         // se o arquivo nao existir vai pedir pra inserir de novo             
+		while(!arq.exists()) {         // se o arquivo nao existir vai pedir pra inserir de novo - buga se a pessoa der enter vazio com 2 ou mais espaços         
 			System.out.println("OPA. CONFIRA SE O NOME DO ARQUIVO ESTÁ CORRETO OU SE ELE EXISTE.");
 			System.out.println("Lembre-se de indicar o formato do arquivo (ex: .txt)");			
 			System.out.println();
 			System.out.print("Insira novamente o nome do arquivo: ");
-		    nomearquivo = teclado.nextLine();
-			endereco = "E:\\Meus Dados\\"+nomearquivo;
+		    endereco = teclado.nextLine();
+			//endereco = "E:\\Meus Dados\\"+nomearquivo;
 			arq = new File (endereco);		 			
 			
 		}  
@@ -148,7 +147,7 @@ public class importar {
 		
 	
 }
-		System.out.println("O programa está finalizado. Até a próxima!"); 
+		System.out.println("O programa está finalizado."); 
 		System.exit(0);
 	} 					
 }
