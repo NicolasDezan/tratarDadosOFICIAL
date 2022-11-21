@@ -8,6 +8,10 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Scanner;
 
+import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
+import javax.swing.filechooser.FileNameExtensionFilter;
+
 public class importar {
 
 	public static void main(String[] args) {            //aqui ocorre a adição de dados e a escolha da forma de inserção dos dados
@@ -39,27 +43,24 @@ public class importar {
 		if(escolha == 2) {                                             //Esse é o método de adição dados por arquivos 
 		// importar dados numéricos de um arquivo .txt -> https://www.youtube.com/watch?v=YHV44ZVgab8&t=34s		
 		String linha = new String(); //vai receber o conjunto de dados em forma de texto-String
-	    System.out.print("Insira o endereço do seu arquivo: ");	    
-	    String endereco = teclado.nextLine();
-		//String endereco = "E:\\Meus Dados\\"+nomearquivo;      // comando desativado que é usado para meu proprio PC 
-		File arq = new File (endereco);
+	    System.out.print("Selecione o endereço de seu arquivo.");	    
+		JFileChooser chooser = new JFileChooser();			//escolher arquivo: https://www.youtube.com/watch?v=1bE0vmWqd94
+		FileNameExtensionFilter filter = new FileNameExtensionFilter("Selecione um arquivo txt","txt"); //opcional: determinar o tipo de arquivo 
+		chooser.setFileFilter(filter); //setar o filtro
+		
+		int retorno = chooser.showOpenDialog(null); //mandando abrir a janela, o arquivo que for selecionado, irá para a variavel "retorno"
+		if(retorno==JFileChooser.APPROVE_OPTION) {
+			JOptionPane.showMessageDialog(null, chooser.getSelectedFile().getAbsolutePath());
+		}
+		File arq = chooser.getSelectedFile();
 
-		while(!arq.exists()) {         // se o arquivo nao existir vai pedir pra inserir de novo - buga se a pessoa der enter vazio com 2 ou mais espaços         
-			System.out.println("OPA. CONFIRA SE O NOME DO ARQUIVO ESTÁ CORRETO OU SE ELE EXISTE.");
-			System.out.println("Lembre-se de indicar o formato do arquivo (ex: .txt)");			
-			System.out.println();
-			System.out.print("Insira novamente o nome do arquivo: ");
-		    endereco = teclado.nextLine();
-			//endereco = "E:\\Meus Dados\\"+nomearquivo;
-			arq = new File (endereco);		 			
-			
-		}  
+		
 		
 		System.out.println();		
 		if (arq.exists()) {
 			
 			try {
-				FileReader leitorDeArquivo = new FileReader(endereco);
+				FileReader leitorDeArquivo = new FileReader(arq);
 				BufferedReader buffer = new BufferedReader(leitorDeArquivo);      
 				
 				
@@ -141,7 +142,6 @@ public class importar {
 				}if(escolha2 == 1) {
 					reiniciar = true;
 				}
-				System.out.println("Obrigado"); 
 
 		}
 		
