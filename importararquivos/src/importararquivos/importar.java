@@ -14,150 +14,105 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 
 public class importar {
 
-	public static void main(String[] args) {            //aqui ocorre a adição de dados e a escolha da forma de inserção dos dados
-		
-		boolean reiniciar = true; //reiniciar é o que caracteriza o loop do programa
-		while(reiniciar) {
-	    Scanner teclado = new Scanner(System.in);	   	  
+	public static void main(String[] args) {
+		Scanner teclado = new Scanner(System.in);
 		List<Float> dados = new ArrayList();
+		
 		System.out.println("Você prefere dar entrada nos dados manualmente(1) ou inserir um arquivo(2)?");
-		int escolha = Integer.parseInt(teclado.nextLine());
-		while((escolha !=1 && escolha !=2)) {                       // Aqui pode ocorre erro no programa se tiver incompatibilidade string x int
-			System.out.println("ERRO. Digite 1 ou 2: ");
-			escolha = Integer.parseInt(teclado.nextLine());
-		}
-		if(escolha == 1) {                                          // Esse é o método de adição de dados direto no terminal
-		    System.out.println("Insira os valores. Aperte [enter] quando finalizar: ");
-		    
-		    dados.add (Float.parseFloat(teclado.nextLine()));
-		    boolean verdade = true;
-		    while (verdade) {
-			try {
-				Float numero = Float.parseFloat(teclado.nextLine());
-				dados.add(numero);
-			} catch (NumberFormatException ex) { verdade = false; }     // O que é esse "NumberFormatException ex"?
-		    } 
+		int escolha = Integer.parseInt(teclado.nextLine());		
+		if(escolha == 1) {manual(dados);}
+		if(escolha == 2) {arquivo(dados);}		
+		
+		float media = calcularMedia(dados);    
+		calcularMediana(dados);
+		calcularDesvioPadrao(dados, media);
 
-		}
-		
-		if(escolha == 2) {                                             //Esse é o método de adição dados por arquivos 
-		// importar dados numéricos de um arquivo .txt -> https://www.youtube.com/watch?v=YHV44ZVgab8&t=34s		
-		String linha = new String(); //vai receber o conjunto de dados em forma de texto-String
-	    System.out.print("Selecione o endereço de seu arquivo.");	    
-		JFileChooser chooser = new JFileChooser();			//escolher arquivo: https://www.youtube.com/watch?v=1bE0vmWqd94
-		FileNameExtensionFilter filter = new FileNameExtensionFilter("Selecione um arquivo txt","txt"); //opcional: determinar o tipo de arquivo 
-		chooser.setFileFilter(filter); //setar o filtro
-		
-		int retorno = chooser.showOpenDialog(null); //mandando abrir a janela, o arquivo que for selecionado, irá para a variavel "retorno"
-		if(retorno==JFileChooser.APPROVE_OPTION) {
-			JOptionPane.showMessageDialog(null, chooser.getSelectedFile().getAbsolutePath());
-		}
-		File arq = chooser.getSelectedFile();
-
-		
-		
-		System.out.println();		
-		if (arq.exists()) {
-			
-			try {
-				FileReader leitorDeArquivo = new FileReader(arq);
-				BufferedReader buffer = new BufferedReader(leitorDeArquivo);      
-				
-				
-				while(true) {
-					linha = buffer.readLine();
-					dados.add (Float.parseFloat(linha));
-					if(linha == null) {
-						break;
-					}
-								
-				}
-			
-				
-			} 
-				
-				catch (Exception e){} // o que é o Exception??
-				
-		} 
-
-		}
-		
-		
-		
-		
-	
-	
-           //calculo da media, desvio padrao e mediana
-		if(dados.size() != 0) {
-		System.out.println(dados);
 		System.out.println();
-			// cálculo da média
+		System.out.println("Fim");
 		
-		    float r = 0.0f;
-		    for (Float dado : dados) {
-		    	r += dado;
-		    }
-		    float media = r/dados.size();
-		    
-		    System.out.println("A média dos seus valores é " + media);
-		    
-		    // cálculo do Desvio Padrão
-		    
-		    float d = 0.0f;
-		    for (Float n : dados) {
-		    	d += Math.pow(n-media, 2);
-		    }
-		    float var = d/(dados.size()-1);
-		    float desvpad = (float) Math.sqrt(var);
-		    
-		    System.out.println("O desvio padrão de seus valores é " + desvpad);
-		    
-		    // cálculo da mediana		   
-		    
-		    Collections.sort(dados);
-		    int n = dados.size();		
-		    int p1 = n/2;
-		    if (n % 2 == 0) {           //dados.size é um numero par		    	
-		    	int p2 = n/2+1;
-		    	Float mediana_0 = dados.get(p1-1) + dados.get(p2-1);	
-		    	Float mediana_par = mediana_0/2;
-		    	System.out.println("A mediana é " + mediana_par);
-		    }
-		    if (n % 2 != 0) {       //dados.size é impar
-		    	System.out.println("A mediana é " + dados.get(p1-1));}
-		    
-		    	System.out.println();
-		    	
-		    	System.out.println("Você gostaria de inserir novos dados?"
-		    			+ "Sim(1) "
-		    			+ "Não(2) ");
-		    	
-		    	
-			    int escolha2 = Integer.parseInt(teclado.nextLine());
-				while((escolha2 !=1 && escolha2 !=2)){                       // Como fazer não dar erro se a pessoa colocar um valor string 
-					System.out.println("ERRO. Digite 1 ou 2: ");
-					escolha2 = Integer.parseInt(teclado.nextLine());}
-				if(escolha2 == 2) {
-					reiniciar = false;
-				}if(escolha2 == 1) {
-					reiniciar = true;
-				}
 
-		}
-		
+	}
 	
-}
-		System.out.println("O programa está finalizado."); 
-		System.exit(0);
-	} 					
-}
+	public static List<Float> manual(List<Float> dados){                                                       //receber os dados pelo teclado
+		Scanner teclado = new Scanner(System.in);
+		dados.add (Float.parseFloat(teclado.nextLine()));
+	    boolean verdade = true;
+	    while (verdade) {
+		try {
+			Float numero = Float.parseFloat(teclado.nextLine());
+			dados.add(numero);
+		} catch (NumberFormatException ex) { verdade = false; }   
+	    } 
+		System.out.println(dados);
+		return dados;
+		
+	}
 
-/*
- * 1) Quando ocorre incompatibilidade float x string o programa "crasha"
- * 2) Eu queria ter feito o looping de forma "mais eficiente". Para conseguir definir o loop tive que 
- * deletar o "public static void tratarDados(...)"
- * 3) O código ficou muito bagunçado 
- */
+	public static List<Float> arquivo(List<Float> dados){                                                      //importar arquivo do computador
+		                                                                                                              // importar dados numéricos de um arquivo .txt -> https://www.youtube.com/watch?v=YHV44ZVgab8&t=34s		
+				String linha = new String();                                                                                 //vai receber o conjunto de dados em forma de texto-String
+			    System.out.println("Selecione seu arquivo.");	    
+				JFileChooser chooser = new JFileChooser();			                                                                  //escolher arquivo: https://www.youtube.com/watch?v=1bE0vmWqd94
+				FileNameExtensionFilter filter = new FileNameExtensionFilter("Selecione um arquivo txt","txt");                                      //opcional: determinar o tipo de arquivo 
+				chooser.setFileFilter(filter);                                                                                                      //setar o filtro				
+				int retorno = chooser.showOpenDialog(null);                                                                             //mandando abrir a janela, o arquivo que for selecionado, irá para a variavel "retorno"
+				
+				if(retorno==JFileChooser.APPROVE_OPTION) {
+					JOptionPane.showMessageDialog(null, chooser.getSelectedFile().getAbsolutePath());
+				}
+				
+				File arq = chooser.getSelectedFile();
+				
+				if (arq.exists()) {
+					try {
+						FileReader leitorDeArquivo = new FileReader(arq);
+						BufferedReader buffer = new BufferedReader(leitorDeArquivo);   						
+						while(true) {
+							linha = buffer.readLine();
+							dados.add (Float.parseFloat(linha));
+							if(linha == null) {break;}}}catch (Exception e){}			
+				} 
+		return dados;
+	}
+
+	public static float calcularMedia(List<Float> dados) {		
+		float r = 0.0f;
+	    for (Float dado : dados) {
+	    	r += dado;
+	    }
+	    float media = r/dados.size();
+	    System.out.println("A média dos seus valores é " + media);
+	    return media;
+	}
+	
+	public static float calcularMediana(List<Float> dados) {
+	    Collections.sort(dados);
+	    int n = dados.size();		
+	    int p1 = n/2;
+	    if (n % 2 == 0) {           //dados.size é um numero par		    	
+	    	int p2 = n/2+1;
+	    	Float mediana_0 = dados.get(p1-1) + dados.get(p2-1);	
+	    	Float mediana_par = mediana_0/2;
+	    	System.out.println("A mediana é " + mediana_par);
+	    }
+	    if (n % 2 != 0) {       //dados.size é impar
+	    	System.out.println("A mediana é " + dados.get(p1-1));}
+	    return 0;
+	}
+
+	public static float calcularDesvioPadrao(List<Float> dados, float media) {
+	    float d = 0.0f;
+	    for (Float n : dados) {
+	    	d += Math.pow(n-media, 2);
+	    }
+	    float var = d/(dados.size()-1);
+	    float desvpad = (float) Math.sqrt(var);
+	    
+	    System.out.println("O desvio padrão de seus valores é " + desvpad);
+	    return 0;
+	}}
+
+
 
 
 		
